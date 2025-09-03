@@ -11,6 +11,7 @@ export default function HomePage() {
     const { t, language } = useLanguage();
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
+    const [currentTime, setCurrentTime] = useState(new Date());
 
     // 模拟订单数据
     const [orders] = useState([
@@ -87,6 +88,15 @@ export default function HomePage() {
             estimatedDelivery: '2025-02-01'
         }
     ]);
+
+    // Update time every second
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
 
     // 订单状态配置
     const statusConfig = {
@@ -178,7 +188,7 @@ export default function HomePage() {
                         <div className="text-right">
                             <p className="text-sm text-gray-500">{t('currentTime')}</p>
                             <p className="text-lg font-mono text-gray-700">
-                                {new Date().toLocaleString(language === 'zh' ? 'zh-CN' : 'en-US')}
+                                {currentTime.toLocaleString(language === 'zh' ? 'zh-CN' : 'en-US')}
                             </p>
                         </div>
                     </div>
