@@ -9,6 +9,9 @@ export default function ProductsPage() {
         { id: 1, name: "iPhone 16" },
         { id: 2, name: "MacBook Pro" },
         { id: 3, name: "Apple Watch" },
+        { id: 4, name: "iPad Pro" },
+        { id: 5, name: "AirPods Pro" },
+        { id: 6, name: "HomePod" }
     ];
 
     return (
@@ -19,8 +22,8 @@ export default function ProductsPage() {
                 <p className="text-gray-600 mb-6">{t('productDescription')}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {products.map((p) => (
-                        <Link 
-                            key={p.id} 
+                        <Link
+                            key={p.id}
                             href={`/products/${p.id}`}
                             className="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
                         >
