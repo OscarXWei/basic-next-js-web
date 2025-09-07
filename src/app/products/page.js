@@ -6,7 +6,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 export default function ProductsPage() {
     const { t } = useLanguage();
     const products = [
-        { id: 1, name: "iPhone 16" },
+        { id: 1, name: "iPhone 16 Pro" },
         { id: 2, name: "MacBook Pro" },
         { id: 3, name: "Apple Watch" },
         { id: 4, name: "iPad Pro" },
