@@ -17,7 +17,7 @@ export default function HomePage() {
     const [orders] = useState([
         {
             id: 'ORD-001',
-            productName: 'MacBook Pro 14"',
+            productName: 'MacBook Pro',
             date: '2025-01-28',
             amount: 1999.99,
             status: 'delivered',
@@ -26,7 +26,7 @@ export default function HomePage() {
         },
         {
             id: 'ORD-002',
-            productName: 'iPhone 15 Pro',
+            productName: 'iPhone 16 Pro',
             date: '2025-01-29',
             amount: 1199.99,
             status: 'shipped',
@@ -44,9 +44,9 @@ export default function HomePage() {
         },
         {
             id: 'ORD-004',
-            productName: 'iPad Air',
+            productName: 'iPad Pro',
             date: '2025-01-31',
-            amount: 599.99,
+            amount: 999.99,
             status: 'pending',
             trackingNumber: null,
             estimatedDelivery: '2025-02-07'

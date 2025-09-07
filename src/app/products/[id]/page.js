@@ -1,11 +1,13 @@
 "use client";
 
+import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function ProductDetail({ params }) {
     const { t, language } = useLanguage();
+    const unwrappedParams = React.use(params);
 
     // Product data with images and descriptions
     const products = {
@@ -269,7 +271,7 @@ export default function ProductDetail({ params }) {
         }
     };
 
-    const product = products[params.id];
+    const product = products[unwrappedParams.id];
 
     if (!product) {
         return (
