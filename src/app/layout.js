@@ -6,12 +6,12 @@ import Link from 'next/link';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
-// 创建一个单独的导航组件
+// Create a navigation component
 function Navigation() {
     const { isAuthenticated, currentUser, logout } = useAuth();
     const { language, toggleLanguage, t } = useLanguage();
 
-    // 如果未认证，不显示导航栏
+    // Don't render navigation if not authenticated
     if (!isAuthenticated) {
         return null;
     }
@@ -68,7 +68,7 @@ function Navigation() {
     );
 }
 
-// 主布局组件
+// Root layout component
 function RootLayoutInner({ children }) {
     return (
         <html lang="en">

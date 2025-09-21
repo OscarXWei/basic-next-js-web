@@ -13,7 +13,7 @@ export default function HomePage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentTime, setCurrentTime] = useState(new Date());
 
-    // 模拟订单数据
+    // mock orders data
     const [orders] = useState([
         {
             id: 'ORD-001',
@@ -98,7 +98,7 @@ export default function HomePage() {
         return () => clearInterval(timer);
     }, []);
 
-    // 订单状态配置
+    // order status configuration
     const statusConfig = {
         pending: {
             label: t('pending'),
@@ -132,7 +132,7 @@ export default function HomePage() {
         }
     };
 
-    // 统计各状态订单数量
+    // count orders by status
     const getStatusCounts = () => {
         const counts = {
             all: orders.length,
@@ -152,7 +152,7 @@ export default function HomePage() {
 
     const statusCounts = getStatusCounts();
 
-    // 过滤订单
+    // filter and search orders
     const filteredOrders = orders.filter(order => {
         const matchesFilter = selectedFilter === 'all' || order.status === selectedFilter;
         const matchesSearch = order.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -160,7 +160,7 @@ export default function HomePage() {
         return matchesFilter && matchesSearch;
     });
 
-    // 显示加载状态
+    // show loading state while checking auth
     if (isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
@@ -169,15 +169,15 @@ export default function HomePage() {
         );
     }
 
-    // 如果未认证，显示登录页面
+    // if not authenticated, show login page
     if (!isAuthenticated) {
         return <AuthApp onLogin={login} />;
     }
 
-    // 如果已认证，显示订单管理页面
+    // if authenticated, show order management dashboard
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* 页面头部 */}
+            {/* Page Header */}
             <div className="bg-white shadow-sm border-b">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <div className="flex justify-between items-center">
@@ -196,7 +196,7 @@ export default function HomePage() {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* 状态统计卡片 */}
+                {/* Status Card */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
                     {Object.entries(statusConfig).map(([status, config]) => (
                         <div
@@ -227,7 +227,7 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                {/* 搜索栏 */}
+                {/* Search Bar */}
                 <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
                     <div className="flex flex-col sm:flex-row gap-4">
                         <div className="flex-1">
@@ -256,7 +256,7 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                {/* 订单列表 */}
+                {/* Order List */}
                 <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-200">
                         <h2 className="text-xl font-semibold text-gray-900">
@@ -354,7 +354,7 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                {/* 快速统计 */}
+                {/* Quick Calculation */}
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-white rounded-lg shadow-sm p-6">
                         <div className="flex items-center">
