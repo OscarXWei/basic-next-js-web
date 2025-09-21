@@ -22,17 +22,10 @@ export default function HomePage() {
         const loadData = async () => {
             setIsLoadingData(true);
             setLoadError(null);
-            try {
-                console.log('Starting to load data...');
-                const orderData = await loadOrderData();
-                console.log('Data loaded:', orderData);
-                setOrders(orderData);
-                console.log('Orders loaded successfully:', orderData.length);
-            } catch (error) {
-                console.error('Failed to load order data:', error);
-                setLoadError(error.message);
-                // Use fallback data
-                setOrders([{
+
+            // Start with fallback data
+            const fallbackData = [
+                {
                     id: 'WOB06376',
                     productName: 'NV | GA236A Surfmist Matt',
                     customer: 'CASH SALES NSW',
@@ -51,12 +44,70 @@ export default function HomePage() {
                     lines: 1,
                     trackingNumber: null,
                     estimatedDelivery: '2025-01-09'
-                }]);
+                },
+                {
+                    id: 'WOB06183',
+                    productName: 'W | GL229A MONUMENT(R) MATT',
+                    customer: 'K & R CONTRACTORS (WA) PTY LTD',
+                    date: '2025-01-24',
+                    dueDate: '2025-01-28',
+                    amount: 1875,
+                    status: 'shipped',
+                    quantity: 21,
+                    sqmTotal: 31.95,
+                    sqmClosed: 0,
+                    sqmInProcess: 0,
+                    sqmReleased: 31.95,
+                    sqmUnscheduled: 0,
+                    scheduler: 'W-HOPV',
+                    notes: 'Please pack in bundles',
+                    lines: 4,
+                    trackingNumber: 'ALU06183',
+                    estimatedDelivery: '2025-01-28'
+                },
+                {
+                    id: 'WOB06295',
+                    productName: 'Q | 272-5125S Deep Ocean Satin',
+                    customer: 'WELLMOORE GLASS & ALUMINIUM',
+                    date: '2025-01-28',
+                    dueDate: '2025-01-27',
+                    amount: 890,
+                    status: 'processing',
+                    quantity: 5,
+                    sqmTotal: 4.5,
+                    sqmClosed: 0,
+                    sqmInProcess: 4.5,
+                    sqmReleased: 0,
+                    sqmUnscheduled: 0,
+                    scheduler: 'Q-YTLA',
+                    notes: '- None -',
+                    lines: 1,
+                    trackingNumber: null,
+                    estimatedDelivery: '2025-01-27'
+                }
+            ];
+
+            setOrders(fallbackData);
+
+            try {
+                console.log('Starting to load data...');
+                const orderData = await loadOrderData();
+                console.log('Data loaded:', orderData);
+                if (orderData && orderData.length > 0) {
+                    setOrders(orderData);
+                }
+                console.log('Orders loaded successfully:', orderData?.length || 'using fallback');
+            } catch (error) {
+                console.error('Failed to load order data:', error);
+                setLoadError(error.message);
+                // Keep using fallback data
             } finally {
                 setIsLoadingData(false);
             }
         };
-        loadData();
+
+        // Add a short delay to show the loading state briefly
+        setTimeout(loadData, 500);
     }, []);
 
     // Update time every second
