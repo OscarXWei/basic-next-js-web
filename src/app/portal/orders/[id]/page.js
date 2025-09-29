@@ -174,7 +174,7 @@ export default function OrderDetailPage() {
                 <div className="text-center bg-white rounded-xl shadow-sm p-8">
                     <div className="text-4xl mb-4 font-bold text-red-400">ERROR</div>
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">Order Not Found</h1>
-                    <p className="text-gray-600 mb-6">The order you're looking for doesn't exist or you don't have access to it.</p>
+                    <p className="text-gray-600 mb-6">The order you&apos;re looking for doesn&apos;t exist or you don&apos;t have access to it.</p>
                     <Link
                         href="/portal"
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
