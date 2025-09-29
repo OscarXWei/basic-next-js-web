@@ -1,95 +1,28 @@
-// app/layout.js
-"use client";
+import "./globals.css";
+import Navigation from "./components/Navigation";
 
-import './globals.css';
-import Link from 'next/link';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
-
-// Create a navigation component
-function Navigation() {
-    const { isAuthenticated, currentUser, logout } = useAuth();
-    const { language, toggleLanguage, t } = useLanguage();
-
-    // Don't render navigation if not authenticated
-    if (!isAuthenticated) {
-        return null;
-    }
-
-    return (
-        <header className="bg-gray-50 border-b border-gray-200">
-            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
-                    <div className="flex items-center space-x-8">
-                        <Link
-                            href="/"
-                            className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-                        >
-                            {t('home')}
-                        </Link>
-                        <Link
-                            href="/about"
-                            className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-                        >
-                            {t('about')}
-                        </Link>
-                        <Link
-                            href="/contact"
-                            className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-                        >
-                            {t('contact')}
-                        </Link>
-                        <Link
-                            href="/products"
-                            className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-                        >
-                            {t('products')}
-                        </Link>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                        <button
-                            onClick={toggleLanguage}
-                            className="flex items-center px-3 py-2 text-sm bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
-                        >
-                            <span className="mr-1">{language === 'en' ? '🇺🇸' : '🇨🇳'}</span>
-                            {language === 'en' ? 'EN' : '中'}
-                        </button>
-                        <span className="text-gray-600">{t('welcome')}, {currentUser}!</span>
-                        <button
-                            onClick={logout}
-                            className="px-4 py-2 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
-                        >
-                            {t('logout')}
-                        </button>
-                    </div>
-                </div>
-            </nav>
-        </header>
-    );
-}
-
-// Root layout component
-function RootLayoutInner({ children }) {
-    return (
-        <html lang="en">
-            <body className="font-sans bg-white text-gray-900">
-                <Navigation />
-                <main>
-                    {children}
-                </main>
-            </body>
-        </html>
-    );
-}
+export const metadata = {
+  title: "Darley Aluminium - Customer Portal",
+  description: "Access your Darley Aluminium customer portal to track orders, view project status, and manage your account.",
+};
 
 export default function RootLayout({ children }) {
-    return (
-        <LanguageProvider>
-            <AuthProvider>
-                <RootLayoutInner>
-                    {children}
-                </RootLayoutInner>
-            </AuthProvider>
-        </LanguageProvider>
-    );
+  return (
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="font-sans antialiased">
+        <Navigation />
+        <main className="pt-16">
+          {children}
+        </main>
+      </body>
+    </html>
+  );
 }
