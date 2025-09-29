@@ -29,10 +29,10 @@ export default function OrderDetailPage() {
             // Mock order detail data
             const mockOrder = {
                 id: orderId,
-                orderDate: '2024-01-15',
-                deliveryDate: '2024-02-10',
+                orderDate: '2025-01-15',
+                deliveryDate: '2025-02-10',
                 status: 'in_production',
-                customerPO: 'PO-2024-001',
+                customerPO: 'PO-2025-001',
                 orderTotal: 15420.50,
                 deliveryAddress: {
                     company: 'Example Construction Pty Ltd',
@@ -63,7 +63,7 @@ export default function OrderDetailPage() {
                         finish: 'Monument Grey Matt',
                         specifications: 'Grade 6063-T6, 3mm thickness',
                         status: 'in_production',
-                        estimatedCompletion: '2024-02-05'
+                        estimatedCompletion: '2025-02-05'
                     },
                     {
                         id: 'item-2',
@@ -73,51 +73,51 @@ export default function OrderDetailPage() {
                         unitPrice: 365.82,
                         totalPrice: 9145.50,
                         finish: 'Natural Anodized - 25μm',
-                        specifications: 'Grade 6060-T5, Custom profile EX-2024-001',
+                        specifications: 'Grade 6060-T5, Custom profile EX-2025-001',
                         status: 'quality_check',
-                        estimatedCompletion: '2024-02-02'
+                        estimatedCompletion: '2025-02-02'
                     }
                 ],
                 timeline: [
                     {
-                        date: '2024-01-15',
+                        date: '2025-01-15',
                         status: 'Order Received',
                         description: 'Order confirmed and added to production queue',
                         completed: true
                     },
                     {
-                        date: '2024-01-18',
+                        date: '2025-01-18',
                         status: 'Material Procurement',
                         description: 'Raw materials sourced and quality checked',
                         completed: true
                     },
                     {
-                        date: '2024-01-22',
+                        date: '2025-01-22',
                         status: 'Production Started',
                         description: 'Manufacturing commenced in our facility',
                         completed: true
                     },
                     {
-                        date: '2024-02-02',
+                        date: '2025-02-02',
                         status: 'Quality Control',
                         description: 'Items undergoing final quality inspection',
                         completed: false,
                         current: true
                     },
                     {
-                        date: '2024-02-05',
+                        date: '2025-02-05',
                         status: 'Packaging',
                         description: 'Secure packaging for transport',
                         completed: false
                     },
                     {
-                        date: '2024-02-08',
+                        date: '2025-02-08',
                         status: 'Dispatch',
                         description: 'Loaded onto delivery vehicle',
                         completed: false
                     },
                     {
-                        date: '2024-02-10',
+                        date: '2025-02-10',
                         status: 'Delivered',
                         description: 'Order delivered to customer site',
                         completed: false
@@ -125,17 +125,17 @@ export default function OrderDetailPage() {
                 ],
                 trackingNumber: 'DA-TRK-001234',
                 contactPerson: {
-                    name: 'Sarah Mitchell',
+                    name: 'Oscar Wei',
                     title: 'Account Manager',
-                    phone: '+61 3 9876 5432',
-                    email: 'sarah.mitchell@darleyaluminium.com.au'
+                    phone: '+61 4 9876 5432',
+                    email: 'oscar.wei@darleyaluminium.com.au'
                 },
                 documents: [
-                    { type: 'Order Confirmation', status: 'available', date: '2024-01-15' },
-                    { type: 'Production Schedule', status: 'available', date: '2024-01-22' },
-                    { type: 'Quality Certificate', status: 'pending', date: '2024-02-02' },
-                    { type: 'Delivery Receipt', status: 'pending', date: '2024-02-10' },
-                    { type: 'Invoice', status: 'pending', date: '2024-02-10' }
+                    { type: 'Order Confirmation', status: 'available', date: '2025-01-15' },
+                    { type: 'Production Schedule', status: 'available', date: '2025-01-22' },
+                    { type: 'Quality Certificate', status: 'pending', date: '2025-02-02' },
+                    { type: 'Delivery Receipt', status: 'pending', date: '2025-02-10' },
+                    { type: 'Invoice', status: 'pending', date: '2025-02-10' }
                 ]
             };
 

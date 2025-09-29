@@ -64,8 +64,8 @@ export default function CustomerPortal() {
             const mockOrders = [
                 {
                     id: 'WOB-001234',
-                    orderDate: '2024-01-15',
-                    deliveryDate: '2024-02-10',
+                    orderDate: '2025-01-15',
+                    deliveryDate: '2025-02-10',
                     status: 'in_production',
                     items: [
                         { product: 'Powder Coated Panels', quantity: 50, finish: 'Monument Grey Matt' },
@@ -77,8 +77,8 @@ export default function CustomerPortal() {
                 },
                 {
                     id: 'WOB-001198',
-                    orderDate: '2024-01-02',
-                    deliveryDate: '2024-01-28',
+                    orderDate: '2025-01-02',
+                    deliveryDate: '2025-01-28',
                     status: 'delivered',
                     items: [
                         { product: 'Custom Fabrication', quantity: 12, finish: 'Surfmist Matt' }
@@ -90,7 +90,7 @@ export default function CustomerPortal() {
                 {
                     id: 'WOB-001067',
                     orderDate: '2023-12-18',
-                    deliveryDate: '2024-01-22',
+                    deliveryDate: '2025-01-22',
                     status: 'shipped',
                     items: [
                         { product: 'Structural Components', quantity: 100, finish: 'Black Satin' }
@@ -385,9 +385,8 @@ function LoginForm({ onLogin }) {
                             type="email"
                             value={credentials.email}
                             onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                                errors.email ? 'border-red-300' : 'border-gray-300'
-                            }`}
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.email ? 'border-red-300' : 'border-gray-300'
+                                }`}
                             placeholder="your.email@company.com"
                             required
                         />
@@ -403,9 +402,8 @@ function LoginForm({ onLogin }) {
                                 type="text"
                                 value={credentials.username}
                                 onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                                    errors.username ? 'border-red-300' : 'border-gray-300'
-                                }`}
+                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.username ? 'border-red-300' : 'border-gray-300'
+                                    }`}
                                 placeholder="johndoe"
                                 required
                             />
@@ -421,9 +419,8 @@ function LoginForm({ onLogin }) {
                             type="password"
                             value={credentials.password}
                             onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                                errors.password ? 'border-red-300' : 'border-gray-300'
-                            }`}
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.password ? 'border-red-300' : 'border-gray-300'
+                                }`}
                             placeholder="••••••••"
                             required
                         />
@@ -439,9 +436,8 @@ function LoginForm({ onLogin }) {
                                 type="password"
                                 value={credentials.confirmPassword}
                                 onChange={(e) => setCredentials({ ...credentials, confirmPassword: e.target.value })}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                                    errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                                }`}
+                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+                                    }`}
                                 placeholder="••••••••"
                                 required
                             />
