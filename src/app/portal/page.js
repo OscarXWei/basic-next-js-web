@@ -271,18 +271,85 @@ export default function CustomerPortal() {
 
 // Login Form Component
 function LoginForm({ onLogin }) {
-    const [credentials, setCredentials] = useState({ email: '', password: '' });
+    const [credentials, setCredentials] = useState({ email: '', password: '', username: '', confirmPassword: '' });
     const [isLoading, setIsLoading] = useState(false);
+    const [isRegisterMode, setIsRegisterMode] = useState(false);
+    const [errors, setErrors] = useState({});
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        // Email validation
+        if (!credentials.email) {
+            newErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(credentials.email)) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+
+        // Password validation
+        if (!credentials.password) {
+            newErrors.password = 'Password is required';
+        } else if (credentials.password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters';
+        }
+
+        // Registration-specific validation
+        if (isRegisterMode) {
+            if (!credentials.username) {
+                newErrors.username = 'Username is required';
+            }
+            if (credentials.password !== credentials.confirmPassword) {
+                newErrors.confirmPassword = 'Passwords do not match';
+            }
+        }
+
+        return newErrors;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrors({});
+
+        const validationErrors = validateForm();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
         setIsLoading(true);
 
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        try {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
 
-        await onLogin(credentials);
-        setIsLoading(false);
+            if (isRegisterMode) {
+                // Handle registration
+                await handleRegister(credentials);
+            } else {
+                // Handle login
+                await onLogin(credentials);
+            }
+        } catch (error) {
+            setErrors({ general: 'An error occurred. Please try again.' });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleRegister = async (userData) => {
+        // Store registered user data
+        const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const newUser = {
+            id: `user_${Date.now()}`,
+            email: userData.email,
+            username: userData.username,
+            registeredAt: new Date().toISOString()
+        };
+        existingUsers.push(newUser);
+        localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+
+        // Auto-login after registration
+        await onLogin(userData);
     };
 
     return (
@@ -295,8 +362,19 @@ function LoginForm({ onLogin }) {
                         className="w-16 h-16 object-contain mx-auto mb-4"
                     />
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">Customer Portal</h1>
-                    <p className="text-gray-600">Sign in to track your orders and manage your account</p>
+                    <p className="text-gray-600">
+                        {isRegisterMode
+                            ? "Create an account to track your orders and manage your account"
+                            : "Sign in to track your orders and manage your account"
+                        }
+                    </p>
                 </div>
+
+                {errors.general && (
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <p className="text-red-600 text-sm">{errors.general}</p>
+                    </div>
+                )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
@@ -307,11 +385,33 @@ function LoginForm({ onLogin }) {
                             type="email"
                             value={credentials.email}
                             onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                                errors.email ? 'border-red-300' : 'border-gray-300'
+                            }`}
                             placeholder="your.email@company.com"
                             required
                         />
+                        {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
                     </div>
+
+                    {isRegisterMode && (
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Username
+                            </label>
+                            <input
+                                type="text"
+                                value={credentials.username}
+                                onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                                    errors.username ? 'border-red-300' : 'border-gray-300'
+                                }`}
+                                placeholder="johndoe"
+                                required
+                            />
+                            {errors.username && <p className="text-red-600 text-sm mt-1">{errors.username}</p>}
+                        </div>
+                    )}
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -321,11 +421,33 @@ function LoginForm({ onLogin }) {
                             type="password"
                             value={credentials.password}
                             onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                                errors.password ? 'border-red-300' : 'border-gray-300'
+                            }`}
                             placeholder="••••••••"
                             required
                         />
+                        {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
                     </div>
+
+                    {isRegisterMode && (
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Confirm Password
+                            </label>
+                            <input
+                                type="password"
+                                value={credentials.confirmPassword}
+                                onChange={(e) => setCredentials({ ...credentials, confirmPassword: e.target.value })}
+                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                                    errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+                                }`}
+                                placeholder="••••••••"
+                                required
+                            />
+                            {errors.confirmPassword && <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>}
+                        </div>
+                    )}
 
                     <button
                         type="submit"
@@ -335,19 +457,38 @@ function LoginForm({ onLogin }) {
                         {isLoading ? (
                             <div className="flex items-center justify-center">
                                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                Signing In...
+                                {isRegisterMode ? 'Creating Account...' : 'Signing In...'}
                             </div>
                         ) : (
-                            'Sign In'
+                            isRegisterMode ? 'Create Account' : 'Sign In'
                         )}
                     </button>
                 </form>
 
                 <div className="mt-6 text-center">
                     <p className="text-sm text-gray-600">
-                        Demo: Use any email and password to login
+                        {isRegisterMode ? 'Already have an account?' : "Don't have an account?"}{' '}
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setIsRegisterMode(!isRegisterMode);
+                                setCredentials({ email: '', password: '', username: '', confirmPassword: '' });
+                                setErrors({});
+                            }}
+                            className="text-blue-600 hover:text-blue-500 font-medium"
+                        >
+                            {isRegisterMode ? 'Sign In' : 'Create Account'}
+                        </button>
                     </p>
                 </div>
+
+                {!isRegisterMode && (
+                    <div className="mt-6 text-center">
+                        <p className="text-sm text-gray-600">
+                            Demo: Use any email and password to login
+                        </p>
+                    </div>
+                )}
 
                 <div className="mt-8 pt-6 border-t border-gray-200 text-center">
                     <p className="text-sm text-gray-600">

@@ -28,6 +28,25 @@ export function AuthProvider({ children }) {
         localStorage.setItem("currentUser", userData);
     };
 
+    const register = (userData) => {
+        // In a real app, this would make an API call to register the user
+        // For now, we'll simulate successful registration and auto-login
+        setIsAuthenticated(true);
+        setCurrentUser(userData.username || userData.email.split('@')[0]);
+        localStorage.setItem("token", "dummy-token");
+        localStorage.setItem("currentUser", userData.username || userData.email.split('@')[0]);
+
+        // Store user registration data (in real app, this would be handled by backend)
+        const existingUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+        const newUser = {
+            email: userData.email,
+            username: userData.username || userData.email.split('@')[0],
+            registeredAt: new Date().toISOString()
+        };
+        existingUsers.push(newUser);
+        localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
+    };
+
     const logout = () => {
         setIsAuthenticated(false);
         setCurrentUser("");
@@ -40,6 +59,7 @@ export function AuthProvider({ children }) {
             isAuthenticated,
             currentUser,
             login,
+            register,
             logout,
             isLoading
         }}>
