@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navigation from "./components/Navigation";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 export const metadata = {
   title: "Darley Aluminium - Customer Portal",
@@ -18,10 +19,12 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="font-sans antialiased">
-        <Navigation />
-        <main className="pt-16">
-          {children}
-        </main>
+        <LanguageProvider>
+          <Navigation />
+          <main className="pt-16">
+            {children}
+          </main>
+        </LanguageProvider>
       </body>
     </html>
   );

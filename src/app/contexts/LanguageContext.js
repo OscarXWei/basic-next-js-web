@@ -175,19 +175,25 @@ const translations = {
 
 export function LanguageProvider({ children }) {
     const [language, setLanguage] = useState('en');
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
+        setIsClient(true);
         // Check if language preference is stored in localStorage
-        const savedLanguage = localStorage.getItem('language');
-        if (savedLanguage && translations[savedLanguage]) {
-            setLanguage(savedLanguage);
+        if (typeof window !== 'undefined') {
+            const savedLanguage = localStorage.getItem('language');
+            if (savedLanguage && translations[savedLanguage]) {
+                setLanguage(savedLanguage);
+            }
         }
     }, []);
 
     const toggleLanguage = () => {
         const newLanguage = language === 'en' ? 'zh' : 'en';
         setLanguage(newLanguage);
-        localStorage.setItem('language', newLanguage);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('language', newLanguage);
+        }
     };
 
     const t = (key) => {
