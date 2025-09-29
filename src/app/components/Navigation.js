@@ -25,17 +25,16 @@ export default function Navigation() {
     ];
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1d2327] border-b border-[#2c3338] shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
+                <div className="flex justify-between items-center h-20">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center">
-                            <span className="text-xl font-bold text-white">DA</span>
-                        </div>
-                        <span className="text-xl font-bold text-gray-900 font-['Poppins']">
-                            Darley Aluminium
-                        </span>
+                    <Link href="/" className="flex items-center">
+                        <img
+                            src="/images/Darley_Logo.png"
+                            alt="Darley Aluminium Logo"
+                            className="w-50 h-50 object-contain"
+                        />
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -44,11 +43,10 @@ export default function Navigation() {
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`text-sm font-medium transition-colors font-['Open_Sans'] ${
-                                    isActiveLink(item.href)
-                                        ? 'text-blue-600 border-b-2 border-blue-600 pb-1'
-                                        : 'text-gray-700 hover:text-blue-600'
-                                }`}
+                                className={`text-sm font-medium transition-colors font-['Open_Sans'] ${isActiveLink(item.href)
+                                    ? 'text-[#72aee6] border-b-2 border-[#72aee6] pb-1'
+                                    : 'text-[#c3c4c7] hover:text-[#72aee6]'
+                                    }`}
                             >
                                 {item.label}
                             </Link>
@@ -59,7 +57,7 @@ export default function Navigation() {
                     <div className="hidden md:flex items-center space-x-4">
                         <Link
                             href="/portal"
-                            className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-cyan-500 transition-all duration-300 font-['Open_Sans']"
+                            className="bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 font-['Open_Sans']"
                         >
                             Access Portal
                         </Link>
@@ -68,7 +66,7 @@ export default function Navigation() {
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="md:hidden p-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+                        className="md:hidden p-2 rounded-lg text-[#c3c4c7] hover:text-[#72aee6] hover:bg-[#2c3338] transition-colors"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             {isMenuOpen ? (
@@ -82,27 +80,26 @@ export default function Navigation() {
 
                 {/* Mobile Menu */}
                 {isMenuOpen && (
-                    <div className="md:hidden border-t border-gray-200 py-4">
+                    <div className="md:hidden border-t border-[#2c3338] py-4">
                         <div className="space-y-4">
                             {navItems.map((item) => (
                                 <Link
                                     key={item.href}
                                     href={item.href}
                                     onClick={() => setIsMenuOpen(false)}
-                                    className={`block text-sm font-medium transition-colors font-['Open_Sans'] ${
-                                        isActiveLink(item.href)
-                                            ? 'text-blue-600'
-                                            : 'text-gray-700 hover:text-blue-600'
-                                    }`}
+                                    className={`block text-sm font-medium transition-colors font-['Open_Sans'] ${isActiveLink(item.href)
+                                        ? 'text-[#72aee6]'
+                                        : 'text-[#c3c4c7] hover:text-[#72aee6]'
+                                        }`}
                                 >
                                     {item.label}
                                 </Link>
                             ))}
-                            <div className="pt-4 border-t border-gray-200 space-y-2">
+                            <div className="pt-4 border-t border-[#2c3338] space-y-2">
                                 <Link
                                     href="/portal"
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="block bg-gradient-to-r from-blue-500 to-cyan-400 text-white px-4 py-2 rounded-lg text-sm font-medium text-center hover:from-blue-600 hover:to-cyan-500 transition-all duration-300 font-['Open_Sans']"
+                                    className="block bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium text-center transition-all duration-300 font-['Open_Sans']"
                                 >
                                     Access Portal
                                 </Link>

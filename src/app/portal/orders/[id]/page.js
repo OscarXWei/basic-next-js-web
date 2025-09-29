@@ -148,21 +148,21 @@ export default function OrderDetailPage() {
 
     const getStatusConfig = (status) => {
         const configs = {
-            'pending': { label: 'Pending', color: 'bg-yellow-100 text-yellow-800 border-yellow-200', icon: '⏳' },
-            'in_production': { label: 'In Production', color: 'bg-blue-100 text-blue-800 border-blue-200', icon: '⚙️' },
-            'quality_check': { label: 'Quality Check', color: 'bg-purple-100 text-purple-800 border-purple-200', icon: '🔍' },
-            'shipped': { label: 'Shipped', color: 'bg-orange-100 text-orange-800 border-orange-200', icon: '🚚' },
-            'delivered': { label: 'Delivered', color: 'bg-green-100 text-green-800 border-green-200', icon: '✅' }
+            'pending': { label: 'Pending', color: 'bg-yellow-100 text-yellow-800 border-yellow-200', icon: '' },
+            'in_production': { label: 'In Production', color: 'bg-blue-100 text-blue-800 border-blue-200', icon: '' },
+            'quality_check': { label: 'Quality Check', color: 'bg-purple-100 text-purple-800 border-purple-200', icon: '' },
+            'shipped': { label: 'Shipped', color: 'bg-orange-100 text-orange-800 border-orange-200', icon: '' },
+            'delivered': { label: 'Delivered', color: 'bg-green-100 text-green-800 border-green-200', icon: '' }
         };
-        return configs[status] || { label: status, color: 'bg-gray-100 text-gray-800 border-gray-200', icon: '❓' };
+        return configs[status] || { label: status, color: 'bg-gray-100 text-gray-800 border-gray-200', icon: '' };
     };
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="min-h-screen flex items-center justify-center bg-[#2d697d]">
                 <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <div className="text-lg text-gray-600">Loading order details...</div>
+                    <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <div className="text-lg text-white">Loading order details...</div>
                 </div>
             </div>
         );
@@ -170,9 +170,9 @@ export default function OrderDetailPage() {
 
     if (!order) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="text-center">
-                    <div className="text-6xl mb-4">❌</div>
+            <div className="min-h-screen flex items-center justify-center bg-[#2d697d]">
+                <div className="text-center bg-white rounded-xl shadow-sm p-8">
+                    <div className="text-4xl mb-4 font-bold text-red-400">ERROR</div>
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">Order Not Found</h1>
                     <p className="text-gray-600 mb-6">The order you're looking for doesn't exist or you don't have access to it.</p>
                     <Link
@@ -187,28 +187,29 @@ export default function OrderDetailPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-[#2d697d]">
             {/* Header */}
-            <header className="bg-white shadow-sm border-b">
+            <header className="bg-[#2c3338] shadow-sm border-b border-[#3c434a]">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center py-6">
                         <div className="flex items-center space-x-4">
-                            <Link href="/" className="flex items-center space-x-3">
-                                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center">
-                                    <span className="text-xl font-bold text-white">DA</span>
-                                </div>
-                                <span className="text-2xl font-bold text-gray-900">Darley Aluminium</span>
+                            <Link href="/" className="flex items-center">
+                                <img
+                                    src="/images/Darley_Logo.png"
+                                    alt="Darley Aluminium Logo"
+                                    className="w-16 h-16 object-contain"
+                                />
                             </Link>
-                            <span className="text-gray-400">|</span>
-                            <Link href="/portal" className="text-lg font-semibold text-blue-600 hover:text-blue-500">
+                            <span className="text-[#a7aaad]">|</span>
+                            <Link href="/portal" className="text-lg font-semibold text-[#72aee6] hover:text-[#2271b1]">
                                 Customer Portal
                             </Link>
                         </div>
 
                         <div className="flex items-center space-x-4">
                             <div className="text-right">
-                                <div className="text-sm font-medium text-gray-900">{user?.name}</div>
-                                <div className="text-sm text-gray-500">{user?.company}</div>
+                                <div className="text-sm font-medium text-[#f0f0f1]">{user?.name}</div>
+                                <div className="text-sm text-[#c3c4c7]">{user?.company}</div>
                             </div>
                         </div>
                     </div>
@@ -246,7 +247,7 @@ export default function OrderDetailPage() {
 
                         <div className="text-right">
                             <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium border ${getStatusConfig(order.status).color}`}>
-                                {getStatusConfig(order.status).icon} {getStatusConfig(order.status).label}
+                                {getStatusConfig(order.status).label}
                             </div>
                             <div className="text-2xl font-bold text-gray-900 mt-2">
                                 ${order.orderTotal.toLocaleString()}
@@ -267,11 +268,11 @@ export default function OrderDetailPage() {
                                         <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-4">
                                             {event.completed ? (
                                                 <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                                                    <span className="text-white text-sm">✓</span>
+                                                    <span className="text-white text-sm font-bold">✓</span>
                                                 </div>
                                             ) : event.current ? (
                                                 <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center animate-pulse">
-                                                    <span className="text-white text-sm">⚙</span>
+                                                    <span className="text-white text-sm font-bold">•</span>
                                                 </div>
                                             ) : (
                                                 <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
@@ -361,13 +362,13 @@ export default function OrderDetailPage() {
                                         href={`tel:${order.contactPerson.phone}`}
                                         className="flex items-center text-sm text-blue-600 hover:text-blue-500"
                                     >
-                                        📞 {order.contactPerson.phone}
+                                        Phone: {order.contactPerson.phone}
                                     </a>
                                     <a
                                         href={`mailto:${order.contactPerson.email}`}
                                         className="flex items-center text-sm text-blue-600 hover:text-blue-500"
                                     >
-                                        ✉️ {order.contactPerson.email}
+                                        Email: {order.contactPerson.email}
                                     </a>
                                 </div>
                             </div>

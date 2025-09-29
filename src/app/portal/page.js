@@ -11,6 +11,7 @@ export default function CustomerPortal() {
     const [loadingOrders, setLoadingOrders] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('all');
 
+
     // Simulate authentication check
     useEffect(() => {
         const checkAuth = async () => {
@@ -110,13 +111,13 @@ export default function CustomerPortal() {
 
     const getStatusConfig = (status) => {
         const configs = {
-            'pending': { label: 'Pending', color: 'bg-yellow-100 text-yellow-800', icon: '⏳' },
-            'in_production': { label: 'In Production', color: 'bg-blue-100 text-blue-800', icon: '⚙️' },
-            'quality_check': { label: 'Quality Check', color: 'bg-purple-100 text-purple-800', icon: '🔍' },
-            'shipped': { label: 'Shipped', color: 'bg-orange-100 text-orange-800', icon: '🚚' },
-            'delivered': { label: 'Delivered', color: 'bg-green-100 text-green-800', icon: '✅' }
+            'pending': { label: 'Pending', color: 'bg-yellow-100 text-yellow-800', icon: '' },
+            'in_production': { label: 'In Production', color: 'bg-blue-100 text-blue-800', icon: '' },
+            'quality_check': { label: 'Quality Check', color: 'bg-purple-100 text-purple-800', icon: '' },
+            'shipped': { label: 'Shipped', color: 'bg-orange-100 text-orange-800', icon: '' },
+            'delivered': { label: 'Delivered', color: 'bg-green-100 text-green-800', icon: '' }
         };
-        return configs[status] || { label: status, color: 'bg-gray-100 text-gray-800', icon: '❓' };
+        return configs[status] || { label: status, color: 'bg-gray-100 text-gray-800', icon: '' };
     };
 
     const filteredOrders = selectedStatus === 'all'
@@ -125,9 +126,9 @@ export default function CustomerPortal() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-slate-900 to-gray-900">
+            <div className="min-h-screen flex items-center justify-center bg-[#2d697d]">
                 <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                     <div className="text-lg text-white">Loading Portal...</div>
                 </div>
             </div>
@@ -139,30 +140,31 @@ export default function CustomerPortal() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-[#2d697d]">
             {/* Header */}
-            <header className="bg-white shadow-sm border-b">
+            <header className="bg-[#2c3338] shadow-sm border-b border-[#3c434a]">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center py-6">
                         <div className="flex items-center space-x-4">
-                            <Link href="/" className="flex items-center space-x-3">
-                                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center">
-                                    <span className="text-xl font-bold text-white">DA</span>
-                                </div>
-                                <span className="text-2xl font-bold text-gray-900">Darley Aluminium</span>
+                            <Link href="/" className="flex items-center">
+                                <img
+                                    src="/images/Darley_Logo.png"
+                                    alt="Darley Aluminium Logo"
+                                    className="w-16 h-16 object-contain"
+                                />
                             </Link>
-                            <span className="text-gray-400">|</span>
-                            <span className="text-lg font-semibold text-gray-700">Customer Portal</span>
+                            <span className="text-[#a7aaad]">|</span>
+                            <span className="text-lg font-semibold text-[#c3c4c7]">Customer Portal</span>
                         </div>
 
                         <div className="flex items-center space-x-4">
                             <div className="text-right">
-                                <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                                <div className="text-sm text-gray-500">{user.company}</div>
+                                <div className="text-sm font-medium text-[#f0f0f1]">{user.name}</div>
+                                <div className="text-sm text-[#c3c4c7]">{user.company}</div>
                             </div>
                             <button
                                 onClick={handleLogout}
-                                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+                                className="bg-[#3c434a] hover:bg-[#2c3338] text-[#c3c4c7] hover:text-[#f0f0f1] px-4 py-2 rounded-lg transition-colors"
                             >
                                 Logout
                             </button>
@@ -183,62 +185,6 @@ export default function CustomerPortal() {
                     </p>
                 </div>
 
-                {/* Quick Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <span className="text-2xl">📦</span>
-                            </div>
-                            <div className="ml-4">
-                                <div className="text-2xl font-bold text-gray-900">{orders.length}</div>
-                                <div className="text-gray-600">Total Orders</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                                <span className="text-2xl">🚚</span>
-                            </div>
-                            <div className="ml-4">
-                                <div className="text-2xl font-bold text-gray-900">
-                                    {orders.filter(o => o.status === 'shipped').length}
-                                </div>
-                                <div className="text-gray-600">In Transit</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <span className="text-2xl">⚙️</span>
-                            </div>
-                            <div className="ml-4">
-                                <div className="text-2xl font-bold text-gray-900">
-                                    {orders.filter(o => o.status === 'in_production').length}
-                                </div>
-                                <div className="text-gray-600">In Production</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                <span className="text-2xl">✅</span>
-                            </div>
-                            <div className="ml-4">
-                                <div className="text-2xl font-bold text-gray-900">
-                                    {orders.filter(o => o.status === 'delivered').length}
-                                </div>
-                                <div className="text-gray-600">Delivered</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 {/* Orders Section */}
                 <div className="bg-white rounded-xl shadow-sm">
@@ -252,11 +198,10 @@ export default function CustomerPortal() {
                                     <button
                                         key={status}
                                         onClick={() => setSelectedStatus(status)}
-                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                                            selectedStatus === status
-                                                ? 'bg-blue-100 text-blue-700'
-                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                        }`}
+                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedStatus === status
+                                            ? 'bg-blue-100 text-blue-700'
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                            }`}
                                     >
                                         {status === 'all' ? 'All' : getStatusConfig(status).label}
                                     </button>
@@ -274,7 +219,7 @@ export default function CustomerPortal() {
                             </div>
                         ) : filteredOrders.length === 0 ? (
                             <div className="p-8 text-center">
-                                <div className="text-4xl mb-4">📦</div>
+                                <div className="text-4xl mb-4 font-bold text-gray-400">Orders</div>
                                 <div className="text-lg text-gray-600">No orders found</div>
                                 <div className="text-sm text-gray-500 mt-2">
                                     {selectedStatus === 'all' ? 'You haven\'t placed any orders yet' : `No ${getStatusConfig(selectedStatus).label.toLowerCase()} orders`}
@@ -288,7 +233,7 @@ export default function CustomerPortal() {
                                             <div className="flex items-center gap-3 mb-2">
                                                 <h3 className="text-lg font-semibold text-gray-900">{order.id}</h3>
                                                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusConfig(order.status).color}`}>
-                                                    {getStatusConfig(order.status).icon} {getStatusConfig(order.status).label}
+                                                    {getStatusConfig(order.status).label}
                                                 </span>
                                             </div>
 
@@ -319,51 +264,6 @@ export default function CustomerPortal() {
                         )}
                     </div>
                 </div>
-
-                {/* Quick Actions */}
-                <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Link
-                        href="/contact"
-                        className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
-                    >
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <span className="text-2xl">💬</span>
-                            </div>
-                            <div className="ml-4">
-                                <div className="font-semibold text-gray-900">Contact Support</div>
-                                <div className="text-sm text-gray-600">Get help with your orders</div>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link
-                        href="/products"
-                        className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
-                    >
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                <span className="text-2xl">🛒</span>
-                            </div>
-                            <div className="ml-4">
-                                <div className="font-semibold text-gray-900">Browse Products</div>
-                                <div className="text-sm text-gray-600">Explore our catalog</div>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <button className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left">
-                        <div className="flex items-center">
-                            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                                <span className="text-2xl">📄</span>
-                            </div>
-                            <div className="ml-4">
-                                <div className="font-semibold text-gray-900">Download Invoice</div>
-                                <div className="text-sm text-gray-600">Get order documentation</div>
-                            </div>
-                        </div>
-                    </button>
-                </div>
             </main>
         </div>
     );
@@ -386,12 +286,14 @@ function LoginForm({ onLogin }) {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-900 via-slate-900 to-gray-900 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-[#2d697d] flex items-center justify-center p-4">
             <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8">
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center mx-auto mb-4">
-                        <span className="text-2xl font-bold text-white">DA</span>
-                    </div>
+                    <img
+                        src="/images/Darley_Logo.png"
+                        alt="Darley Aluminium Logo"
+                        className="w-16 h-16 object-contain mx-auto mb-4"
+                    />
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">Customer Portal</h1>
                     <p className="text-gray-600">Sign in to track your orders and manage your account</p>
                 </div>
@@ -428,7 +330,7 @@ function LoginForm({ onLogin }) {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-cyan-500 transition-all duration-300 disabled:opacity-50"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50"
                     >
                         {isLoading ? (
                             <div className="flex items-center justify-center">
