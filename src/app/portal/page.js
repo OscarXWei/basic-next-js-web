@@ -2,55 +2,21 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useUser, RedirectToSignIn } from "@clerk/nextjs";
 
 export default function CustomerPortal() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [user, setUser] = useState(null);
+    const { isSignedIn, user, isLoaded } = useUser();
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('all');
 
-
-    // Simulate authentication check
+    // Load orders when user is authenticated
     useEffect(() => {
-        const checkAuth = async () => {
-            // TODO: Replace with actual NextAuth.js session check
-            const isLoggedIn = localStorage.getItem('darley_user');
-            if (isLoggedIn) {
-                setIsAuthenticated(true);
-                setUser(JSON.parse(isLoggedIn));
-                await loadOrders();
-            }
-            setIsLoading(false);
-        };
-        checkAuth();
-    }, []);
+        if (isSignedIn) {
+            loadOrders();
+        }
+    }, [isSignedIn]);
 
-    // Mock login function - TODO: Replace with NextAuth.js
-    const handleLogin = async (credentials) => {
-        // Simulate API login
-        const mockUser = {
-            id: 'user123',
-            name: credentials.email.split('@')[0],
-            email: credentials.email,
-            company: 'Example Company Pty Ltd',
-            customerCode: 'C001234'
-        };
-
-        localStorage.setItem('darley_user', JSON.stringify(mockUser));
-        setUser(mockUser);
-        setIsAuthenticated(true);
-        await loadOrders();
-    };
-
-    // Mock logout function - TODO: Replace with NextAuth.js
-    const handleLogout = () => {
-        localStorage.removeItem('darley_user');
-        setUser(null);
-        setIsAuthenticated(false);
-        setOrders([]);
-    };
 
     // Load orders from API (placeholder)
     const loadOrders = async () => {
@@ -124,7 +90,7 @@ export default function CustomerPortal() {
         ? orders
         : orders.filter(order => order.status === selectedStatus);
 
-    if (isLoading) {
+    if (!isLoaded) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[#2d697d]">
                 <div className="text-center">
@@ -135,8 +101,8 @@ export default function CustomerPortal() {
         );
     }
 
-    if (!isAuthenticated) {
-        return <LoginForm onLogin={handleLogin} />;
+    if (!isSignedIn) {
+        return <RedirectToSignIn />;
     }
 
     return (
@@ -159,15 +125,11 @@ export default function CustomerPortal() {
 
                         <div className="flex items-center space-x-4">
                             <div className="text-right">
-                                <div className="text-sm font-medium text-[#f0f0f1]">{user.name}</div>
-                                <div className="text-sm text-[#c3c4c7]">{user.company}</div>
+                                <div className="text-sm font-medium text-[#f0f0f1]">
+                                    {user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'User'}
+                                </div>
+                                <div className="text-sm text-[#c3c4c7]">Customer Portal</div>
                             </div>
-                            <button
-                                onClick={handleLogout}
-                                className="bg-[#3c434a] hover:bg-[#2c3338] text-[#c3c4c7] hover:text-[#f0f0f1] px-4 py-2 rounded-lg transition-colors"
-                            >
-                                Logout
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -178,7 +140,7 @@ export default function CustomerPortal() {
                 {/* Welcome Section */}
                 <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                        Welcome back, {user.name}
+                        Welcome back, {user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'User'}
                     </h1>
                     <p className="text-gray-600">
                         Track your orders, view delivery status, and manage your account
@@ -265,233 +227,6 @@ export default function CustomerPortal() {
                     </div>
                 </div>
             </main>
-        </div>
-    );
-}
-
-// Login Form Component
-function LoginForm({ onLogin }) {
-    const [credentials, setCredentials] = useState({ email: '', password: '', username: '', confirmPassword: '' });
-    const [isLoading, setIsLoading] = useState(false);
-    const [isRegisterMode, setIsRegisterMode] = useState(false);
-    const [errors, setErrors] = useState({});
-
-    const validateForm = () => {
-        const newErrors = {};
-
-        // Email validation
-        if (!credentials.email) {
-            newErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(credentials.email)) {
-            newErrors.email = 'Please enter a valid email address';
-        }
-
-        // Password validation
-        if (!credentials.password) {
-            newErrors.password = 'Password is required';
-        } else if (credentials.password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters';
-        }
-
-        // Registration-specific validation
-        if (isRegisterMode) {
-            if (!credentials.username) {
-                newErrors.username = 'Username is required';
-            }
-            if (credentials.password !== credentials.confirmPassword) {
-                newErrors.confirmPassword = 'Passwords do not match';
-            }
-        }
-
-        return newErrors;
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setErrors({});
-
-        const validationErrors = validateForm();
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-            return;
-        }
-
-        setIsLoading(true);
-
-        try {
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            if (isRegisterMode) {
-                // Handle registration
-                await handleRegister(credentials);
-            } else {
-                // Handle login
-                await onLogin(credentials);
-            }
-        } catch (error) {
-            setErrors({ general: 'An error occurred. Please try again.' });
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleRegister = async (userData) => {
-        // Store registered user data
-        const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        const newUser = {
-            id: `user_${Date.now()}`,
-            email: userData.email,
-            username: userData.username,
-            registeredAt: new Date().toISOString()
-        };
-        existingUsers.push(newUser);
-        localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
-
-        // Auto-login after registration
-        await onLogin(userData);
-    };
-
-    return (
-        <div className="min-h-screen bg-[#2d697d] flex items-center justify-center p-4">
-            <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8">
-                <div className="text-center mb-8">
-                    <img
-                        src="/images/Darley_Logo.png"
-                        alt="Darley Aluminium Logo"
-                        className="w-16 h-16 object-contain mx-auto mb-4"
-                    />
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">Customer Portal</h1>
-                    <p className="text-gray-600">
-                        {isRegisterMode
-                            ? "Create an account to track your orders and manage your account"
-                            : "Sign in to track your orders and manage your account"
-                        }
-                    </p>
-                </div>
-
-                {errors.general && (
-                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <p className="text-red-600 text-sm">{errors.general}</p>
-                    </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Email Address
-                        </label>
-                        <input
-                            type="email"
-                            value={credentials.email}
-                            onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.email ? 'border-red-300' : 'border-gray-300'
-                                }`}
-                            placeholder="your.email@company.com"
-                            required
-                        />
-                        {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
-                    </div>
-
-                    {isRegisterMode && (
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Username
-                            </label>
-                            <input
-                                type="text"
-                                value={credentials.username}
-                                onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.username ? 'border-red-300' : 'border-gray-300'
-                                    }`}
-                                placeholder="johndoe"
-                                required
-                            />
-                            {errors.username && <p className="text-red-600 text-sm mt-1">{errors.username}</p>}
-                        </div>
-                    )}
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            value={credentials.password}
-                            onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.password ? 'border-red-300' : 'border-gray-300'
-                                }`}
-                            placeholder="••••••••"
-                            required
-                        />
-                        {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
-                    </div>
-
-                    {isRegisterMode && (
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Confirm Password
-                            </label>
-                            <input
-                                type="password"
-                                value={credentials.confirmPassword}
-                                onChange={(e) => setCredentials({ ...credentials, confirmPassword: e.target.value })}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                                    }`}
-                                placeholder="••••••••"
-                                required
-                            />
-                            {errors.confirmPassword && <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>}
-                        </div>
-                    )}
-
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50"
-                    >
-                        {isLoading ? (
-                            <div className="flex items-center justify-center">
-                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                {isRegisterMode ? 'Creating Account...' : 'Signing In...'}
-                            </div>
-                        ) : (
-                            isRegisterMode ? 'Create Account' : 'Sign In'
-                        )}
-                    </button>
-                </form>
-
-                <div className="mt-6 text-center">
-                    <p className="text-sm text-gray-600">
-                        {isRegisterMode ? 'Already have an account?' : "Don't have an account?"}{' '}
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setIsRegisterMode(!isRegisterMode);
-                                setCredentials({ email: '', password: '', username: '', confirmPassword: '' });
-                                setErrors({});
-                            }}
-                            className="text-blue-600 hover:text-blue-500 font-medium"
-                        >
-                            {isRegisterMode ? 'Sign In' : 'Create Account'}
-                        </button>
-                    </p>
-                </div>
-
-                {!isRegisterMode && (
-                    <div className="mt-6 text-center">
-                        <p className="text-sm text-gray-600">
-                            Demo: Use any email and password to login
-                        </p>
-                    </div>
-                )}
-
-                <div className="mt-8 pt-6 border-t border-gray-200 text-center">
-                    <p className="text-sm text-gray-600">
-                        Need access? <Link href="/contact" className="text-blue-600 hover:text-blue-500">Contact our team</Link>
-                    </p>
-                </div>
-            </div>
         </div>
     );
 }

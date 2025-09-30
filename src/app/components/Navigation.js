@@ -3,10 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUser, SignInButton, UserButton } from "@clerk/nextjs";
 
 export default function Navigation() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathname = usePathname();
+    const { isSignedIn, user } = useUser();
 
     // Don't show navigation on portal pages (they have their own header)
     if (pathname?.startsWith('/portal')) {
@@ -53,14 +55,25 @@ export default function Navigation() {
                         ))}
                     </div>
 
-                    {/* Desktop CTA Buttons */}
+                    {/* Desktop Auth Buttons */}
                     <div className="hidden md:flex items-center space-x-4">
-                        <Link
-                            href="/portal"
-                            className="bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 font-['Open_Sans']"
-                        >
-                            Access Portal
-                        </Link>
+                        {isSignedIn ? (
+                            <div className="flex items-center space-x-4">
+                                <Link
+                                    href="/portal"
+                                    className="bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 font-['Open_Sans']"
+                                >
+                                    Portal
+                                </Link>
+                                <UserButton />
+                            </div>
+                        ) : (
+                            <SignInButton mode="modal">
+                                <button className="bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 font-['Open_Sans']">
+                                    Sign In
+                                </button>
+                            </SignInButton>
+                        )}
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -96,13 +109,29 @@ export default function Navigation() {
                                 </Link>
                             ))}
                             <div className="pt-4 border-t border-[#2c3338] space-y-2">
-                                <Link
-                                    href="/portal"
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className="block bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium text-center transition-all duration-300 font-['Open_Sans']"
-                                >
-                                    Access Portal
-                                </Link>
+                                {isSignedIn ? (
+                                    <div className="space-y-2">
+                                        <Link
+                                            href="/portal"
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="block bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium text-center transition-all duration-300 font-['Open_Sans']"
+                                        >
+                                            Portal
+                                        </Link>
+                                        <div className="flex justify-center">
+                                            <UserButton />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <SignInButton mode="modal">
+                                        <button
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="block w-full bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium text-center transition-all duration-300 font-['Open_Sans']"
+                                        >
+                                            Sign In
+                                        </button>
+                                    </SignInButton>
+                                )}
                             </div>
                         </div>
                     </div>

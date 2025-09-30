@@ -1,6 +1,6 @@
 import "./globals.css";
 import Navigation from "./components/Navigation";
-import { LanguageProvider } from "./contexts/LanguageContext";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata = {
   title: "Darley Aluminium - Customer Portal",
@@ -19,12 +19,12 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="font-sans antialiased">
-        <LanguageProvider>
+        <ClerkProvider>
           <Navigation />
           <main className="pt-16">
             {children}
           </main>
-        </LanguageProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
