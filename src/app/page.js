@@ -52,7 +52,7 @@ export default function HomePage() {
                             Access Portal
                         </Link>
                     ) : (
-                        <SignInButton mode="modal" redirectUrl="/portal">
+                        <SignInButton mode="modal" forceRedirectUrl="/portal">
                             <button className="bg-[#72aee6] hover:bg-[#2271b1] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
                                 Access Portal
                             </button>

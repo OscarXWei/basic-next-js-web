@@ -2,25 +2,23 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useUser, RedirectToSignIn } from "@clerk/nextjs";
 
 export default function OrderDetailPage() {
     const params = useParams();
+    const router = useRouter();
     const orderId = params.id;
+    const { isSignedIn, user, isLoaded } = useUser();
 
     const [order, setOrder] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [user, setUser] = useState(null);
 
     useEffect(() => {
         const loadOrderDetails = async () => {
-            // Check authentication
-            const userData = localStorage.getItem('darley_user');
-            if (!userData) {
-                window.location.href = '/portal';
+            if (!isSignedIn) {
                 return;
             }
-            setUser(JSON.parse(userData));
 
             // TODO: Replace with actual API call
             // const response = await fetch(`/api/orders/${orderId}`);
@@ -144,7 +142,22 @@ export default function OrderDetailPage() {
         };
 
         loadOrderDetails();
-    }, [orderId]);
+    }, [orderId, isSignedIn]);
+
+    if (!isLoaded) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-[#2d697d]">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <div className="text-lg text-white">Loading...</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (!isSignedIn) {
+        return <RedirectToSignIn />;
+    }
 
     const getStatusConfig = (status) => {
         const configs = {
@@ -188,44 +201,17 @@ export default function OrderDetailPage() {
 
     return (
         <div className="min-h-screen bg-[#2d697d]">
-            {/* Header */}
-            <header className="bg-[#2c3338] shadow-sm border-b border-[#3c434a]">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center py-6">
-                        <div className="flex items-center space-x-4">
-                            <Link href="/" className="flex items-center">
-                                <img
-                                    src="/images/Darley_Logo.png"
-                                    alt="Darley Aluminium Logo"
-                                    className="w-16 h-16 object-contain"
-                                />
-                            </Link>
-                            <span className="text-[#a7aaad]">|</span>
-                            <Link href="/portal" className="text-lg font-semibold text-[#72aee6] hover:text-[#2271b1]">
-                                Customer Portal
-                            </Link>
-                        </div>
-
-                        <div className="flex items-center space-x-4">
-                            <div className="text-right">
-                                <div className="text-sm font-medium text-[#f0f0f1]">{user?.name}</div>
-                                <div className="text-sm text-[#c3c4c7]">{user?.company}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
 
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Breadcrumb */}
+                {/* Breadcrumb
                 <nav className="mb-6">
                     <div className="flex items-center space-x-2 text-sm text-gray-600">
                         <Link href="/portal" className="hover:text-blue-600">Portal</Link>
                         <span>›</span>
                         <span className="text-gray-900">Order {order.id}</span>
                     </div>
-                </nav>
+                </nav> */}
 
                 {/* Order Header */}
                 <div className="bg-white rounded-xl shadow-sm p-6 mb-8">

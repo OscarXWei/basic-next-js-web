@@ -1,14 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser, SignInButton, UserButton } from "@clerk/nextjs";
 
 export default function Navigation() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
     const pathname = usePathname();
-    const { isSignedIn, user } = useUser();
+    const { isSignedIn, isLoaded } = useUser();
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Show navigation on all pages
 
@@ -36,9 +41,11 @@ export default function Navigation() {
                         />
                     </Link>
 
-                    {/* Desktop Navigation */}
+                    {/* Desktop Navigation
                     <div className="hidden md:flex items-center space-x-8">
-                        {navItems.map((item) => (
+                        {navItems
+                            .filter(item => !(isSignedIn && item.href === '/portal'))
+                            .map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
@@ -50,11 +57,13 @@ export default function Navigation() {
                                 {item.label}
                             </Link>
                         ))}
-                    </div>
+                    </div> */}
 
                     {/* Desktop Auth Buttons */}
                     <div className="hidden md:flex items-center space-x-4">
-                        {isSignedIn ? (
+                        {!mounted || !isLoaded ? (
+                            <div className="w-8 h-8" />
+                        ) : isSignedIn ? (
                             <UserButton />
                         ) : (
                             <SignInButton mode="modal">
@@ -87,20 +96,22 @@ export default function Navigation() {
                             {navItems
                                 .filter(item => !(isSignedIn && item.href === '/portal'))
                                 .map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className={`block text-sm font-medium transition-colors font-['Open_Sans'] ${isActiveLink(item.href)
-                                        ? 'text-[#72aee6]'
-                                        : 'text-[#c3c4c7] hover:text-[#72aee6]'
-                                        }`}
-                                >
-                                    {item.label}
-                                </Link>
-                            ))}
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className={`block text-sm font-medium transition-colors font-['Open_Sans'] ${isActiveLink(item.href)
+                                            ? 'text-[#72aee6]'
+                                            : 'text-[#c3c4c7] hover:text-[#72aee6]'
+                                            }`}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                ))}
                             <div className="pt-4 border-t border-[#2c3338] space-y-2">
-                                {isSignedIn ? (
+                                {!mounted || !isLoaded ? (
+                                    <div className="w-full h-10" />
+                                ) : isSignedIn ? (
                                     <div className="space-y-2">
                                         <div className="flex justify-center">
                                             <UserButton />
