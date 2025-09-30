@@ -7,9 +7,8 @@ import { useUser, RedirectToSignIn } from "@clerk/nextjs";
 
 export default function OrderDetailPage() {
     const params = useParams();
-    const router = useRouter();
     const orderId = params.id;
-    const { isSignedIn, user, isLoaded } = useUser();
+    const { isSignedIn, isLoaded } = useUser();
 
     const [order, setOrder] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -124,7 +123,7 @@ export default function OrderDetailPage() {
                 trackingNumber: 'DA-TRK-001234',
                 contactPerson: {
                     name: 'Oscar Wei',
-                    title: 'Account Manager',
+                    title: 'Your Customer Service Manager',
                     phone: '+61 4 9876 5432',
                     email: 'oscar.wei@darleyaluminium.com.au'
                 },

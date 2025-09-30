@@ -108,33 +108,8 @@ export async function getAllOrders(filters = {}) {
         //     estimatedDelivery: row.due_date
         // }));
 
-        // TEMPORARY: Load from CSV file (will be replaced with database)
-        const { parseCSV, transformOrderData } = await import('../utils/csvParser');
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/data/Darley Production Summary Results.csv`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const csvText = await response.text();
-        const csvData = parseCSV(csvText);
-        let orders = transformOrderData(csvData);
-
-        // Apply filters to CSV data (temporary logic until database is ready)
-        if (filters.status) {
-            orders = orders.filter(order => order.status === filters.status);
-        }
-        if (filters.customer) {
-            orders = orders.filter(order =>
-                order.customer.toLowerCase().includes(filters.customer.toLowerCase())
-            );
-        }
-        if (filters.limit) {
-            const start = filters.offset || 0;
-            orders = orders.slice(start, start + filters.limit);
-        }
-
-        return orders;
+        // TEMPORARY: Return empty array (frontend uses mock data directly)
+        return [];
     } catch (error) {
         console.error('Database query error:', error);
         throw error;
@@ -197,9 +172,8 @@ export async function getOrderById(orderId) {
         //     estimatedDelivery: row.due_date
         // };
 
-        // TEMPORARY: Find order in CSV data
-        const orders = await getAllOrders();
-        return orders.find(order => order.id === orderId) || null;
+        // TEMPORARY: Return null (frontend uses mock data directly)
+        return null;
     } catch (error) {
         console.error('Database query error:', error);
         throw error;
