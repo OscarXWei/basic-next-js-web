@@ -10,10 +10,7 @@ export default function Navigation() {
     const pathname = usePathname();
     const { isSignedIn, user } = useUser();
 
-    // Don't show navigation on portal pages (they have their own header)
-    if (pathname?.startsWith('/portal')) {
-        return null;
-    }
+    // Show navigation on all pages
 
     const isActiveLink = (href) => {
         if (href === '/') {
@@ -58,15 +55,7 @@ export default function Navigation() {
                     {/* Desktop Auth Buttons */}
                     <div className="hidden md:flex items-center space-x-4">
                         {isSignedIn ? (
-                            <div className="flex items-center space-x-4">
-                                <Link
-                                    href="/portal"
-                                    className="bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 font-['Open_Sans']"
-                                >
-                                    Portal
-                                </Link>
-                                <UserButton />
-                            </div>
+                            <UserButton />
                         ) : (
                             <SignInButton mode="modal">
                                 <button className="bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 font-['Open_Sans']">
@@ -95,7 +84,9 @@ export default function Navigation() {
                 {isMenuOpen && (
                     <div className="md:hidden border-t border-[#2c3338] py-4">
                         <div className="space-y-4">
-                            {navItems.map((item) => (
+                            {navItems
+                                .filter(item => !(isSignedIn && item.href === '/portal'))
+                                .map((item) => (
                                 <Link
                                     key={item.href}
                                     href={item.href}
@@ -111,13 +102,6 @@ export default function Navigation() {
                             <div className="pt-4 border-t border-[#2c3338] space-y-2">
                                 {isSignedIn ? (
                                     <div className="space-y-2">
-                                        <Link
-                                            href="/portal"
-                                            onClick={() => setIsMenuOpen(false)}
-                                            className="block bg-[#72aee6] hover:bg-[#2271b1] text-[#f0f0f1] px-4 py-2 rounded-lg text-sm font-medium text-center transition-all duration-300 font-['Open_Sans']"
-                                        >
-                                            Portal
-                                        </Link>
                                         <div className="flex justify-center">
                                             <UserButton />
                                         </div>

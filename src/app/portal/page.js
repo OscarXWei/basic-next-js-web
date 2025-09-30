@@ -107,33 +107,6 @@ export default function CustomerPortal() {
 
     return (
         <div className="min-h-screen bg-[#2d697d]">
-            {/* Header */}
-            <header className="bg-[#2c3338] shadow-sm border-b border-[#3c434a]">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center py-6">
-                        <div className="flex items-center space-x-4">
-                            <Link href="/" className="flex items-center">
-                                <img
-                                    src="/images/Darley_Logo.png"
-                                    alt="Darley Aluminium Logo"
-                                    className="w-16 h-16 object-contain"
-                                />
-                            </Link>
-                            <span className="text-[#a7aaad]">|</span>
-                            <span className="text-lg font-semibold text-[#c3c4c7]">Customer Portal</span>
-                        </div>
-
-                        <div className="flex items-center space-x-4">
-                            <div className="text-right">
-                                <div className="text-sm font-medium text-[#f0f0f1]">
-                                    {user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'User'}
-                                </div>
-                                <div className="text-sm text-[#c3c4c7]">Customer Portal</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
 
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
